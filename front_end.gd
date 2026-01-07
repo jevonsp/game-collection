@@ -14,11 +14,12 @@ func _on_pressed(which: Button) -> void:
 	match which.name:
 		"Button0":
 			scroll_container.visible = false
-			scroll_container.release_focus()
+			which.release_focus()
 			var game = games[0].instantiate()
 			game.game_quit.connect(_on_quit)
 			add_child(game)
 
 func _on_quit() -> void:
+	var b:Button = get_tree().get_first_node_in_group("buttons")
+	b.grab_focus()
 	scroll_container.visible = true
-	scroll_container.grab_focus()
