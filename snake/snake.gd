@@ -1,4 +1,5 @@
 extends Node2D
+signal game_data_sent(gd: GameData)
 signal game_quit
 @export var cell_size = Vector2(32, 32)
 @export var grid_size = Vector2i(20, 20)
@@ -12,7 +13,9 @@ var snake_direction: Vector2i = Vector2i.RIGHT
 var apple_cells: Array[Vector2i] = []
 var timer: float = 0.0
 var apples_eaten: int = 0
-@onready var score_label: Label = $ScoreLabel
+var hi_score: int = 0
+@onready var score_label: Label = $VBoxContainer/ScoreLabel
+@onready var hi_score_label: Label = $VBoxContainer/HiScoreLabel
 
 func _ready() -> void:
 	#get_viewport().connect("size_changed", Callable(self, "_on_viewport_size_changed"))
@@ -22,6 +25,9 @@ func _ready() -> void:
 			
 	prepare_game()
 
+func set_vars(gd: GameData) -> void:
+	hi_score = int(gd.hi_score)
+	
 func prepare_game():
 	print("snake preparing")
 	start = starting_cells.pick_random()
@@ -47,8 +53,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("right"):
 		turn_snake(Vector2i.RIGHT)
 	if event.is_action_pressed("ui_cancel"):
-		game_quit.emit()
-		queue_free()
+		quit()
 
 func _on_viewport_size_changed() -> void:
 	queue_redraw()
@@ -151,6 +156,7 @@ func spawn_apple():
 		apple_cells = [chosen_cell]
 	
 func lose():
+	update_hi_score_label()
 	occupied_cells.clear()
 	apple_cells.clear()
 	snake_direction = Vector2i.RIGHT
@@ -158,9 +164,21 @@ func lose():
 	apples_eaten = 0
 	update_label()
 	prepare_game()
-
-func win():
-	pass
+	
+func quit():
+	update_hi_score_label()
+	var gd = GameData.new()
+	gd.name = "snake"
+	gd.hi_score = hi_score
+	game_data_sent.emit(gd)
+	game_quit.emit()
+	queue_free()
 
 func update_label():
-	score_label.text = "Score: %s" % [apples_eaten * 5]
+	score_label.text = "%s" % [apples_eaten * 5]
+	
+func update_hi_score_label():
+	var score = apples_eaten * 5
+	if score > hi_score:
+		hi_score = score
+		hi_score_label.text = "%s" % [score]
