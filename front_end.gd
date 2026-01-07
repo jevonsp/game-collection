@@ -1,6 +1,6 @@
 extends Control
 
-@export var games: Array[PackedScene] = []
+@export var games: Dictionary[String, PackedScene] = {}
 @onready var scroll_container: ScrollContainer = $ScrollContainer
 
 var game_datas: Dictionary = {}
@@ -12,16 +12,21 @@ func _ready() -> void:
 		b.pressed.connect(pressed)
 		
 func _on_pressed(which: Button) -> void:
-	print("which=%s" % [which])
-	match which.name:
-		"Button0":
-			scroll_container.visible = false
-			which.release_focus()
-			var game = games[0].instantiate()
-			game.set_vars(game_datas["snake"])
-			game.game_data_sent.connect(_on_game_data_recieved)
-			game.game_quit.connect(_on_quit)
-			add_child(game)
+	scroll_container.visible = false
+	which.release_focus()
+	
+	print("button: %s" % [which.name])
+	print("games: %s" % [games.keys()])
+	
+	var game = games[which.name]
+	var new_game = game.instantiate()
+	if new_game.has_method("set_vars")and game_datas.has(which.name):
+		new_game.set_vars(game_datas[which.name])
+	if new_game.has_signal("game_data_sent") and new_game.has_signal("game_quit"):
+		new_game.game_data_sent.connect(_on_game_data_recieved)
+		new_game.game_quit.connect(_on_quit)
+		
+	add_child(new_game)
 
 func _on_quit() -> void:
 	var b:Button = get_tree().get_first_node_in_group("buttons")

@@ -13,7 +13,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 script = ExtResource("1_kmk83")
-games = Array[PackedScene]([ExtResource("2_fgqus")])
+games = Dictionary[String, PackedScene]({
+"snake": ExtResource("2_fgqus")
+})
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -33,7 +35,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Button0" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
+[node name="snake" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Snake"
