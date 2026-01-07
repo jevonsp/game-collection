@@ -34,13 +34,6 @@ func _on_quit() -> void:
 	scroll_container.visible = true
 	
 func _on_game_data_recieved(gd: GameData):
-	print(gd)
-	print(gd.name)
-	print(gd.hi_score)
-	for game:GameData in game_datas:
-		if game_datas.has(gd.name):
-			if game.hi_score > gd.hi_score:
-				game_datas[gd.name] = gd
-				return
-	game_datas[gd.name] = gd
+	if not game_datas.has(gd.name) or gd.hi_score > game_datas[gd.name].hi_score:
+		game_datas[gd.name] = gd
 	

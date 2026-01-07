@@ -33,7 +33,7 @@ func prepare_game():
 	start = starting_cells.pick_random()
 	snake_length = 1
 	occupied_cells.append(start)
-	
+	hi_score_label.text = "%s" % [hi_score]
 	spawn_apple()
 	update_label()
 
