@@ -1,19 +1,21 @@
 extends Node2D
+signal game_quit
 @export var cell_size = Vector2(32, 32)
 @export var grid_size = Vector2i(20, 20)
 var game_cells: Array[Vector2i]
 var starting_cells := [Vector2i(9, 9), Vector2i(9, 10), Vector2i(10, 9), Vector2i(10, 10)]
 var occupied_cells: Array[Vector2i] = []
 var snake_length: int = 0
-var start: Vector2i = Vector2i.ZERO  # Changed from Vector2 to Vector2i
+var start: Vector2i = Vector2i.ZERO
 var offset: Vector2 = Vector2.ZERO
 var snake_direction: Vector2i = Vector2i.RIGHT
 var apple_cells: Array[Vector2i] = []
 var timer: float = 0.0
+var apples_eaten: int = 0
+@onready var score_label: Label = $ScoreLabel
 
 func _ready() -> void:
-	get_viewport().connect("size_changed", Callable(self, "_on_viewport_size_changed"))
-	
+	#get_viewport().connect("size_changed", Callable(self, "_on_viewport_size_changed"))
 	for x in range(20):
 		for y in range(20):
 			game_cells.append(Vector2i(x, y))
@@ -21,11 +23,13 @@ func _ready() -> void:
 	prepare_game()
 
 func prepare_game():
+	print("snake preparing")
 	start = starting_cells.pick_random()
 	snake_length = 1
 	occupied_cells.append(start)
 	
 	spawn_apple()
+	update_label()
 
 func _process(delta: float) -> void:
 	timer += delta
@@ -42,6 +46,9 @@ func _input(event: InputEvent) -> void:
 		turn_snake(Vector2i.LEFT)
 	if event.is_action_pressed("right"):
 		turn_snake(Vector2i.RIGHT)
+	if event.is_action_pressed("ui_cancel"):
+		game_quit.emit()
+		queue_free()
 
 func _on_viewport_size_changed() -> void:
 	queue_redraw()
@@ -112,6 +119,8 @@ func advance_snake():
 			snake_length += 1
 			apple_cells.erase(i)
 			ate_apple = true
+			apples_eaten += 1
+			update_label()
 			break
 
 	occupied_cells.push_front(want_to_move)
@@ -125,7 +134,7 @@ func advance_snake():
 	
 func turn_snake(dir: Vector2i):
 	if dir == -snake_direction:
-		lose()
+		return
 	snake_direction = dir
 	
 func spawn_apple():
@@ -135,15 +144,23 @@ func spawn_apple():
 			available_cells.erase(i)
 		if available_cells.has(i):
 			var dist = occupied_cells[0] - i
-			if dist.x > 10 or dist.y > 10:
+			if abs(dist.x) > 5 or abs(dist.y) > 5:
 				available_cells.erase(i)
-				
-	var chosen_cell = available_cells.pick_random()
-	apple_cells = [chosen_cell]
+	if available_cells.size() > 0:
+		var chosen_cell = available_cells.pick_random()
+		apple_cells = [chosen_cell]
 	
 func lose():
 	occupied_cells.clear()
 	apple_cells.clear()
 	snake_direction = Vector2i.RIGHT
 	snake_length = 0
+	apples_eaten = 0
+	update_label()
 	prepare_game()
+
+func win():
+	pass
+
+func update_label():
+	score_label.text = "Score: %s" % [apples_eaten * 5]

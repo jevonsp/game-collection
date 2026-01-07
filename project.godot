@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Game Collection"
-run/main_scene="uid://cq3u0pa3qj6nb"
+run/main_scene="uid://dpkd8twsxvght"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
 [input]
