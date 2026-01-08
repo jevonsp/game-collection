@@ -50,32 +50,51 @@ offset_top = 58.0
 offset_right = 40.0
 offset_bottom = 98.0
 
-[node name="Turquoise" type="Button" parent="InputButtons"]
+[node name="Turquoise" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Cyan" type="Button" parent="InputButtons"]
+[node name="Cyan" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Red" type="Button" parent="InputButtons"]
+[node name="Red" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Yellow" type="Button" parent="InputButtons"]
+[node name="Yellow" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Purple" type="Button" parent="InputButtons"]
+[node name="Purple" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Orange" type="Button" parent="InputButtons"]
+[node name="Orange" type="Button" parent="InputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_top = 116.0
+offset_right = 84.0
+offset_bottom = 156.0
+
+[node name="Clear" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Clear"
+
+[node name="Accept" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Accept
+"
+
+[connection signal="pressed" from="HBoxContainer/Clear" to="." method="_on_clear_pressed"]
+[connection signal="pressed" from="HBoxContainer/Accept" to="." method="_on_accept_pressed"]
