@@ -16,7 +16,8 @@ var cpu_color_sequence:Array[Choice] = []
 
 func _ready() -> void:
 	bind_buttons()
-	cpu_color_sequence = pick_color_sequence()
+	#cpu_color_sequence = pick_color_sequence()
+	cpu_color_sequence = [Choice.TURQUOISE, Choice.TURQUOISE, Choice.RED, Choice.RED]
 
 func bind_buttons() -> void:
 	var buttons := get_tree().get_nodes_in_group("buttons")
@@ -32,14 +33,15 @@ func bind_buttons() -> void:
 		b.pressed.connect(pressed)
 		
 func _on_pressed(which: Button) -> void:
+	if choice_index >= 4:
+		print("Row is full! Press Accept to submit or Clear to reset")
+		return
 	var selected = which.get_meta("choice")
 	var next_rect = row.guesses[choice_index]
 	next_rect.color = colors[selected]
 	selected_choice_sequence.append(selected)
 	choice_index += 1
-	if choice_index >= 4:
-		choice_index = 0
-
+	
 func pick_color_sequence() -> Array[Choice]:
 	var res:Array[Choice] = []
 	var choices:Array[Choice] = [
@@ -53,6 +55,7 @@ func _on_clear_pressed() -> void:
 	for rect in row.guesses:
 		rect.color = Color.WHITE
 	selected_choice_sequence.clear()
+	choice_index = 0
 
 func _on_accept_pressed() -> void:
 	if len(selected_choice_sequence) < 4:
@@ -65,4 +68,13 @@ func _on_accept_pressed() -> void:
 		print("i=%s, choice=%s" % [i, choices[index]])
 	for rect in row.guesses:
 		rect.color = Color.WHITE
-	selected_choice_sequence.clear()
+	evaluate_guess(selected_choice_sequence)
+	_on_clear_pressed()
+	
+func evaluate_guess(sequence) -> void:
+	for i in range(sequence.size()):
+		var guess_choice = sequence[i]
+		var cpu_choice = cpu_color_sequence[i]
+		print("Position %s: guess %s, cpu %s" % [i, guess_choice, cpu_choice])
+		print("  Correct color anywhere: %s" % [guess_choice in cpu_color_sequence])
+		print("  Correct color and position: %s" % [guess_choice == cpu_choice])
