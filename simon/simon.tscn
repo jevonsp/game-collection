@@ -120,10 +120,16 @@ theme_override_font_sizes/font_size = 32
 text = "Hi-Score:"
 
 [node name="PlayButton" type="Button" parent="."]
-offset_left = 556.0
-offset_top = 2.0
-offset_right = 597.0
-offset_bottom = 33.0
+custom_minimum_size = Vector2(100, 50)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 524.0
+offset_top = 15.0
+offset_right = 624.0
+offset_bottom = 68.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
 text = "Play"
 
 [node name="TimeLabel" type="Label" parent="."]

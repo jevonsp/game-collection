@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpkd8twsxvght"]
+[gd_scene load_steps=4 format=3 uid="uid://dpkd8twsxvght"]
 
 [ext_resource type="Script" uid="uid://bgl062qvnfxy5" path="res://front_end.gd" id="1_kmk83"]
 [ext_resource type="PackedScene" uid="uid://cq3u0pa3qj6nb" path="res://snake/snake.tscn" id="2_fgqus"]
+[ext_resource type="PackedScene" uid="uid://rjlkfn2v4bpm" path="res://simon/simon.tscn" id="3_s2bpr"]
 
 [node name="FrontEnd" type="Control"]
 custom_minimum_size = Vector2(200, 0)
@@ -14,6 +15,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 script = ExtResource("1_kmk83")
 games = Dictionary[String, PackedScene]({
+"simon": ExtResource("3_s2bpr"),
 "snake": ExtResource("2_fgqus")
 })
 
@@ -39,3 +41,7 @@ alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 text = "Snake"
+
+[node name="simon" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
+layout_mode = 2
+text = "Simon"

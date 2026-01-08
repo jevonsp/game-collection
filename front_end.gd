@@ -15,9 +15,6 @@ func _on_pressed(which: Button) -> void:
 	scroll_container.visible = false
 	which.release_focus()
 	
-	print("button: %s" % [which.name])
-	print("games: %s" % [games.keys()])
-	
 	var game = games[which.name]
 	var new_game = game.instantiate()
 	if new_game.has_method("set_vars")and game_datas.has(which.name):
@@ -36,4 +33,3 @@ func _on_quit() -> void:
 func _on_game_data_recieved(gd: GameData):
 	if not game_datas.has(gd.name) or gd.hi_score > game_datas[gd.name].hi_score:
 		game_datas[gd.name] = gd
-	

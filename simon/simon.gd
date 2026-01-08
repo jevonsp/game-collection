@@ -49,6 +49,10 @@ func _process(delta: float) -> void:
 	if timer >= time_allowed:
 		lose()
 
+func _input(event: InputEvent) -> void:
+		if event.is_action_pressed("ui_cancel"):
+			quit()
+
 func set_vars(gd: GameData) -> void:
 	hi_score = int(gd.hi_score)
 
@@ -188,3 +192,13 @@ func _on_play_button_pressed() -> void:
 func update_labels():
 	score_label.text = "%s" % [score]
 	hi_score_label.text = "%s" % [hi_score]
+
+func quit():
+	if score > hi_score:
+		hi_score = score
+	var gd = GameData.new()
+	gd.name = "simon"
+	gd.hi_score = hi_score
+	game_data_sent.emit(gd)
+	game_quit.emit()
+	queue_free()
