@@ -45,3 +45,7 @@ text = "Snake"
 [node name="simon" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
 layout_mode = 2
 text = "Simon"
+
+[node name="life" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
+layout_mode = 2
+text = "Conway's Game of LIfe"

@@ -1,7 +1,7 @@
 extends CharacterBody2D
 signal camera_updated
 @export_subgroup("Movement Stats")
-@export var move_speed := 300.0
+@export var move_speed := 600.0
 @export var acceleration := 1500.0
 @export var friction := 1200.0
 @onready var camera_2d: Camera2D = $Camera2D
