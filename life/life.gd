@@ -2,6 +2,11 @@ extends Node2D
 
 const grid_color = Color.DARK_GRAY
 const EXTENSION_FACTOR = 4
+const NEIGHBOR_OFFSETS := [
+	Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
+	Vector2(-1,  0),                 Vector2(1,  0),
+	Vector2(-1,  1), Vector2(0,  1), Vector2(1,  1),
+]
 @export var grid_size: Vector2 = Vector2(48, 48)
 var occupied_cells: Array[Vector2] = []
 @onready var camera_body: CharacterBody2D = $CameraBody
@@ -88,56 +93,33 @@ func get_grid_mouse_position() -> Vector2:
 		floor(world_pos.y / grid_size.y)
 	)
 
-func get_occupied_neighbors(grid_position: Vector2) -> Array[Vector2]:
-	var neighbors: Array[Vector2] = []
-	
-	if grid_position + Vector2.UP in occupied_cells:
-		neighbors.append(grid_position + Vector2.UP)
-	if grid_position + Vector2.DOWN in occupied_cells:
-		neighbors.append(grid_position + Vector2.DOWN)
-	if grid_position + Vector2.RIGHT in occupied_cells:
-		neighbors.append(grid_position + Vector2.RIGHT)
-	if grid_position + Vector2.LEFT in occupied_cells:
-		neighbors.append(grid_position + Vector2.LEFT)
-	
-	return neighbors
-	
-func get_unoccupied_neighbors(grid_position: Vector2) -> Array[Vector2]:
-	var unoccupied_neighbors: Array[Vector2] = []
-	
-	if grid_position + Vector2.UP not in occupied_cells:
-		unoccupied_neighbors.append(grid_position + Vector2.UP)
-	if grid_position + Vector2.DOWN not in occupied_cells:
-		unoccupied_neighbors.append(grid_position + Vector2.DOWN)
-	if grid_position + Vector2.RIGHT not in occupied_cells:
-		unoccupied_neighbors.append(grid_position + Vector2.RIGHT)
-	if grid_position + Vector2.LEFT not in occupied_cells:
-		unoccupied_neighbors.append(grid_position + Vector2.LEFT)
-	
-	return unoccupied_neighbors
+func get_occupied_neighbors(cell: Vector2) -> int:
+	var count := 0
+	for offset in NEIGHBOR_OFFSETS:
+		if cell + offset in occupied_cells:
+			count += 1
+	return count
 
 func advance_game_state():
-	print("advance_game_state called")
-	var new_occupied_cells: Array[Vector2] = occupied_cells.duplicate()
-	
+	var new_occupied: Array[Vector2] = []
+	var candidates: Dictionary = {}
+
+	# 1. Survival / death
 	for cell in occupied_cells:
-		var neighbors = get_occupied_neighbors(cell)
-		
-		if len(neighbors) < 2:
-			print("cell %s had too few neighbors" % [cell])
-			new_occupied_cells.erase(cell)
-		if len(neighbors) > 3:
-			print("cell %s had too many neighbors" % [cell])
-			new_occupied_cells.erase(cell)
-			
-	for cell in occupied_cells:
-		var empty_neighbors = get_unoccupied_neighbors(cell)
-		print("empty_neighbors=%s" % [empty_neighbors])
-		for empty_cell in empty_neighbors:
-			if len(get_occupied_neighbors(cell)) == 3:
-				print("cell %s born" % [cell])
-				new_occupied_cells.append(empty_cell)
-	
-	occupied_cells = new_occupied_cells
-	
+		var n := get_occupied_neighbors(cell)
+		if n == 2 or n == 3:
+			new_occupied.append(cell)
+
+		# Track empty neighbors as birth candidates
+		for offset:Vector2 in NEIGHBOR_OFFSETS:
+			var candidate := cell + offset
+			if candidate not in occupied_cells:
+				candidates[candidate] = true
+
+	# 2. Births
+	for cell in candidates.keys():
+		if get_occupied_neighbors(cell) == 3:
+			new_occupied.append(cell)
+
+	occupied_cells = new_occupied
 	update_grid()
