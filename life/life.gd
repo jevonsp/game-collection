@@ -2,7 +2,7 @@ extends Node2D
 
 const grid_color = Color.DARK_GRAY
 @export var grid_size: Vector2 = Vector2(48, 48)
-
+var occupied_cells: Array[Vector2] = []
 @onready var camera_body: CharacterBody2D = $CameraBody
 @onready var camera_2d: Camera2D = $CameraBody/Camera2D
 @onready var viewport: Viewport = get_viewport()
@@ -14,15 +14,25 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print("left click")
-			print("world_pos=%s" % [get_world_mouse_pos()])
-			print("grid_pos=%s" % [get_grid_mouse_position()])
+			var grid_position = get_grid_mouse_position()
+			if grid_position in occupied_cells:
+				return
+			else:
+				occupied_cells.append(grid_position)
+			update_grid()
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			print("right click")
-			print("world_pos=%s" % [get_world_mouse_pos()])
-			print("grid_pos=%s" % [get_grid_mouse_position()])
+			var grid_position = get_grid_mouse_position()
+			if grid_position not in occupied_cells:
+				return
+			else:
+				occupied_cells.erase(grid_position)
+			update_grid()
 
 func _draw() -> void:
+	draw_grid()
+	draw_squares()
+	
+func draw_grid():
 	if not camera_2d:
 		return
 	
@@ -32,6 +42,7 @@ func _draw() -> void:
 	
 	var world_top_left = camera_pos - (viewport_size * camera_zoom / 2)
 	var world_bottom_right = camera_pos + (viewport_size * camera_zoom / 2)
+	
 	
 	var extension_factor = 4
 	var extended_top_left = world_top_left - viewport_size * camera_zoom * extension_factor
@@ -57,6 +68,10 @@ func _draw() -> void:
 			grid_color
 		)
 
+func draw_squares():
+	for i in occupied_cells:
+		draw_rect(Rect2((Vector2(i) * grid_size), grid_size), Color.WHITE)
+
 func update_grid() -> void:
 	queue_redraw()
 
@@ -68,6 +83,6 @@ func get_world_mouse_pos() -> Vector2:
 func get_grid_mouse_position() -> Vector2:
 	var world_pos = get_world_mouse_pos()
 	return Vector2(
-		floor(world_pos.x / grid_size.x) * grid_size.x,
-		floor(world_pos.y / grid_size.y) * grid_size.y
+		floor(world_pos.x / grid_size.x),
+		floor(world_pos.y / grid_size.y)
 	)

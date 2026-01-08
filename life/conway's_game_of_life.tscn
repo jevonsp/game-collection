@@ -16,3 +16,14 @@ script = ExtResource("2_6t0ly")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBody"]
 visible = false
 shape = SubResource("CircleShape2D_dol0o")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
