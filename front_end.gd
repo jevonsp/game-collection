@@ -19,8 +19,9 @@ func _on_pressed(which: Button) -> void:
 	var new_game = game.instantiate()
 	if new_game.has_method("set_vars")and game_datas.has(which.name):
 		new_game.set_vars(game_datas[which.name])
-	if new_game.has_signal("game_data_sent") and new_game.has_signal("game_quit"):
+	if new_game.has_signal("game_data_sent"):
 		new_game.game_data_sent.connect(_on_game_data_recieved)
+	if new_game.has_signal("game_quit"):
 		new_game.game_quit.connect(_on_quit)
 		
 	add_child(new_game)

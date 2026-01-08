@@ -1,5 +1,5 @@
 extends Node2D
-
+signal game_quit
 const grid_color = Color.DARK_GRAY
 const EXTENSION_FACTOR = 100
 const NEIGHBOR_OFFSETS := [
@@ -9,12 +9,19 @@ const NEIGHBOR_OFFSETS := [
 ]
 @export var grid_size: Vector2 = Vector2(48, 48)
 var occupied_cells: Dictionary = {}
-var is_playing: bool = false
+var is_playing: bool = false:
+	set(value):
+		is_playing = value
+		if is_playing:
+			label.visible = true
+		else:
+			label.visible = false  
 var timer: float = 0.0
 var time_allowed: float = .25
 @onready var camera_body: CharacterBody2D = $CameraBody
 @onready var camera_2d: Camera2D = $CameraBody/Camera2D
 @onready var viewport: Viewport = get_viewport()
+@onready var label: Label = $CanvasLayer/Label
 
 func _ready() -> void:
 	camera_body.camera_updated.connect(update_grid)
@@ -44,7 +51,7 @@ func _input(event: InputEvent) -> void:
 			play()
 		
 	if event.is_action_pressed("ui_cancel"):
-		queue_free()
+		quit()
 		
 	if event.is_action_pressed("ui_right"):
 		if time_allowed - .1 <= 0.0:
@@ -134,3 +141,7 @@ func play():
 	
 func pause():
 	is_playing = false
+	
+func quit():
+	game_quit.emit()
+	queue_free()
