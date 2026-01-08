@@ -16,6 +16,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var grid_position = get_grid_mouse_position()
 			if grid_position in occupied_cells:
+				print("neighbors=%s" % [get_neighboring_cells(grid_position)])
 				return
 			else:
 				occupied_cells.append(grid_position)
@@ -23,6 +24,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			var grid_position = get_grid_mouse_position()
 			if grid_position not in occupied_cells:
+				print("neighbors=%s" % [get_neighboring_cells(grid_position)])
 				return
 			else:
 				occupied_cells.erase(grid_position)
@@ -86,3 +88,19 @@ func get_grid_mouse_position() -> Vector2:
 		floor(world_pos.x / grid_size.x),
 		floor(world_pos.y / grid_size.y)
 	)
+
+func get_neighboring_cells(grid_position: Vector2) -> Array[Vector2]:
+	var neighbors: Array[Vector2] = []
+	
+	if grid_position + Vector2.UP in occupied_cells:
+		neighbors.append(grid_position + Vector2.UP)
+	if grid_position + Vector2.DOWN in occupied_cells:
+		neighbors.append(grid_position + Vector2.DOWN)
+	if grid_position + Vector2.RIGHT in occupied_cells:
+		neighbors.append(grid_position + Vector2.RIGHT)
+	if grid_position + Vector2.LEFT in occupied_cells:
+		neighbors.append(grid_position + Vector2.LEFT)
+	
+	print("grid_position=%s" % [grid_position])
+	
+	return neighbors
