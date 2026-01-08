@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://dk78yfg7dfw45"]
+[gd_scene load_steps=4 format=3 uid="uid://dk78yfg7dfw45"]
 
 [ext_resource type="Script" uid="uid://bjv2smyccweqk" path="res://life/life.gd" id="1_e55er"]
+[ext_resource type="Script" uid="uid://dycq340g2ekdr" path="res://life/character_body_2d.gd" id="2_6t0ly"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dol0o"]
 
 [node name="Life" type="Node2D"]
 script = ExtResource("1_e55er")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
+[node name="CameraBody" type="CharacterBody2D" parent="."]
+script = ExtResource("2_6t0ly")
+
+[node name="Camera2D" type="Camera2D" parent="CameraBody"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBody"]
+visible = false
+shape = SubResource("CircleShape2D_dol0o")

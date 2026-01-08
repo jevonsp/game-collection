@@ -1,31 +1,73 @@
 extends Node2D
 
-const color = Color.DARK_GRAY
+const grid_color = Color.DARK_GRAY
 @export var grid_size: Vector2 = Vector2(48, 48)
 
-@onready var camera: Camera2D = $Camera2D
+@onready var camera_body: CharacterBody2D = $CameraBody
+@onready var camera_2d: Camera2D = $CameraBody/Camera2D
 @onready var viewport: Viewport = get_viewport()
 
-func _process(_delta: float) -> void:
-	queue_redraw()
-	
+func _ready() -> void:
+	if camera_body:
+		camera_body.camera_updated.connect(update_grid)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("left click")
+			print("world_pos=%s" % [get_world_mouse_pos()])
+			print("grid_pos=%s" % [get_grid_mouse_position()])
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			print("right click")
+			print("world_pos=%s" % [get_world_mouse_pos()])
+			print("grid_pos=%s" % [get_grid_mouse_position()])
+
 func _draw() -> void:
-	var viewport_size = viewport.size
-	var camera_pos = camera.position
-	var vp_right = viewport_size.x * camera.zoom.x
-	var vp_bottom = viewport_size.y * camera.zoom.y
+	if not camera_2d:
+		return
 	
-	var leftmost = -vp_right + camera_pos.x
-	var topmost = -vp_bottom + camera_pos.y
+	var viewport_size = get_viewport_rect().size
+	var camera_pos = camera_2d.position
+	var camera_zoom = camera_2d.zoom
 	
-	var left = ceil(leftmost / grid_size.x) * grid_size.x
-	var bottommost = vp_bottom + camera_pos.y
-	for x in range(0, viewport_size.x / camera.zoom.x + 1):
-		draw_line(Vector2(left, topmost), Vector2(left, bottommost), color)
-		left += grid_size.x
+	var world_top_left = camera_pos - (viewport_size * camera_zoom / 2)
+	var world_bottom_right = camera_pos + (viewport_size * camera_zoom / 2)
 	
-	var top = ceil(topmost / grid_size.y)  * grid_size.y
-	var rightmost = vp_right + camera_pos.x
-	for y in range(0, viewport_size.y / camera.zoom.y + 1):
-		draw_line(Vector2(leftmost, top), Vector2(rightmost, top), color)
-		top += grid_size.y
+	var extension_factor = 4
+	var extended_top_left = world_top_left - viewport_size * camera_zoom * extension_factor
+	var extended_bottom_right = world_bottom_right + viewport_size * camera_zoom * extension_factor
+	
+	var start_x = floor(extended_top_left.x / grid_size.x) * grid_size.x
+	var end_x = ceil(extended_bottom_right.x / grid_size.x) * grid_size.x
+	
+	for x in range(start_x, end_x + grid_size.x, grid_size.x):
+		draw_line(
+			Vector2(x, extended_top_left.y),
+			Vector2(x, extended_bottom_right.y),
+			grid_color
+		)
+	
+	var start_y = floor(extended_top_left.y / grid_size.y) * grid_size.y
+	var end_y = ceil(extended_bottom_right.y / grid_size.y) * grid_size.y
+	
+	for y in range(start_y, end_y + grid_size.y, grid_size.y):
+		draw_line(
+			Vector2(extended_top_left.x, y),
+			Vector2(extended_bottom_right.x, y),
+			grid_color
+		)
+
+func update_grid() -> void:
+	queue_redraw()
+
+func get_world_mouse_pos() -> Vector2:
+	var mouse_pos = get_viewport().get_mouse_position()
+	var cam_pos = camera_body.global_position
+	return cam_pos + (mouse_pos - Vector2(viewport.size / 2)) / camera_2d.zoom
+
+func get_grid_mouse_position() -> Vector2:
+	var world_pos = get_world_mouse_pos()
+	return Vector2(
+		floor(world_pos.x / grid_size.x) * grid_size.x,
+		floor(world_pos.y / grid_size.y) * grid_size.y
+	)
