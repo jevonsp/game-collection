@@ -1,6 +1,7 @@
 extends Node2D
 
 const grid_color = Color.DARK_GRAY
+const EXTENSION_FACTOR = 4
 @export var grid_size: Vector2 = Vector2(48, 48)
 var occupied_cells: Array[Vector2] = []
 @onready var camera_body: CharacterBody2D = $CameraBody
@@ -16,7 +17,6 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var grid_position = get_grid_mouse_position()
 			if grid_position in occupied_cells:
-				print("neighbors=%s" % [get_neighboring_cells(grid_position)])
 				return
 			else:
 				occupied_cells.append(grid_position)
@@ -24,11 +24,12 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			var grid_position = get_grid_mouse_position()
 			if grid_position not in occupied_cells:
-				print("neighbors=%s" % [get_neighboring_cells(grid_position)])
 				return
 			else:
 				occupied_cells.erase(grid_position)
 			update_grid()
+	if event.is_action_pressed("ui_accept"):
+		advance_game_state()
 
 func _draw() -> void:
 	draw_grid()
@@ -45,10 +46,8 @@ func draw_grid():
 	var world_top_left = camera_pos - (viewport_size * camera_zoom / 2)
 	var world_bottom_right = camera_pos + (viewport_size * camera_zoom / 2)
 	
-	
-	var extension_factor = 4
-	var extended_top_left = world_top_left - viewport_size * camera_zoom * extension_factor
-	var extended_bottom_right = world_bottom_right + viewport_size * camera_zoom * extension_factor
+	var extended_top_left = world_top_left - viewport_size * camera_zoom * EXTENSION_FACTOR
+	var extended_bottom_right = world_bottom_right + viewport_size * camera_zoom * EXTENSION_FACTOR
 	
 	var start_x = floor(extended_top_left.x / grid_size.x) * grid_size.x
 	var end_x = ceil(extended_bottom_right.x / grid_size.x) * grid_size.x
@@ -89,7 +88,7 @@ func get_grid_mouse_position() -> Vector2:
 		floor(world_pos.y / grid_size.y)
 	)
 
-func get_neighboring_cells(grid_position: Vector2) -> Array[Vector2]:
+func get_occupied_neighbors(grid_position: Vector2) -> Array[Vector2]:
 	var neighbors: Array[Vector2] = []
 	
 	if grid_position + Vector2.UP in occupied_cells:
@@ -101,6 +100,44 @@ func get_neighboring_cells(grid_position: Vector2) -> Array[Vector2]:
 	if grid_position + Vector2.LEFT in occupied_cells:
 		neighbors.append(grid_position + Vector2.LEFT)
 	
-	print("grid_position=%s" % [grid_position])
-	
 	return neighbors
+	
+func get_unoccupied_neighbors(grid_position: Vector2) -> Array[Vector2]:
+	var unoccupied_neighbors: Array[Vector2] = []
+	
+	if grid_position + Vector2.UP not in occupied_cells:
+		unoccupied_neighbors.append(grid_position + Vector2.UP)
+	if grid_position + Vector2.DOWN not in occupied_cells:
+		unoccupied_neighbors.append(grid_position + Vector2.DOWN)
+	if grid_position + Vector2.RIGHT not in occupied_cells:
+		unoccupied_neighbors.append(grid_position + Vector2.RIGHT)
+	if grid_position + Vector2.LEFT not in occupied_cells:
+		unoccupied_neighbors.append(grid_position + Vector2.LEFT)
+	
+	return unoccupied_neighbors
+
+func advance_game_state():
+	print("advance_game_state called")
+	var new_occupied_cells: Array[Vector2] = occupied_cells.duplicate()
+	
+	for cell in occupied_cells:
+		var neighbors = get_occupied_neighbors(cell)
+		
+		if len(neighbors) < 2:
+			print("cell %s had too few neighbors" % [cell])
+			new_occupied_cells.erase(cell)
+		if len(neighbors) > 3:
+			print("cell %s had too many neighbors" % [cell])
+			new_occupied_cells.erase(cell)
+			
+	for cell in occupied_cells:
+		var empty_neighbors = get_unoccupied_neighbors(cell)
+		print("empty_neighbors=%s" % [empty_neighbors])
+		for empty_cell in empty_neighbors:
+			if len(get_occupied_neighbors(cell)) == 3:
+				print("cell %s born" % [cell])
+				new_occupied_cells.append(empty_cell)
+	
+	occupied_cells = new_occupied_cells
+	
+	update_grid()
