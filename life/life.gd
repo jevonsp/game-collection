@@ -7,17 +7,26 @@ const NEIGHBOR_OFFSETS := [
 	Vector2(-1,  0),                 Vector2(1,  0),
 	Vector2(-1,  1), Vector2(0,  1), Vector2(1,  1),
 ]
-
 @export var grid_size: Vector2 = Vector2(48, 48)
-
 var occupied_cells: Dictionary = {}
-
+var is_playing: bool = false
+var timer: float = 0.0
+var time_allowed: float = .25
 @onready var camera_body: CharacterBody2D = $CameraBody
 @onready var camera_2d: Camera2D = $CameraBody/Camera2D
 @onready var viewport: Viewport = get_viewport()
 
 func _ready() -> void:
 	camera_body.camera_updated.connect(update_grid)
+
+func _process(delta: float) -> void:
+	if is_playing:
+		timer += delta
+		if timer >= time_allowed:
+			advance_game_state()
+			timer = 0.0
+	else:
+		timer = 0.0
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
@@ -29,10 +38,22 @@ func _input(event: InputEvent) -> void:
 		update_grid()
 
 	if event.is_action_pressed("ui_accept"):
-		advance_game_state()
+		if is_playing:
+			pause()
+		else:
+			play()
 		
 	if event.is_action_pressed("ui_cancel"):
 		queue_free()
+		
+	if event.is_action_pressed("ui_right"):
+		if time_allowed - .1 <= 0.0:
+			return
+		time_allowed -= .1
+	if event.is_action_pressed("ui_left"):
+		if time_allowed + .1 > 1.0:
+			return
+		time_allowed += .1
 
 func _draw() -> void:
 	draw_grid()
@@ -107,3 +128,9 @@ func advance_game_state():
 
 	occupied_cells = next_state
 	update_grid()
+
+func play():
+	is_playing = true
+	
+func pause():
+	is_playing = false
