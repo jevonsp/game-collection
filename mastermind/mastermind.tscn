@@ -1,0 +1,81 @@
+[gd_scene load_steps=3 format=3 uid="uid://naq3h64sx7wv"]
+
+[ext_resource type="Script" uid="uid://bopvs4kl7pfnr" path="res://mastermind/mastermind.gd" id="1_1mk4e"]
+[ext_resource type="PackedScene" uid="uid://q1wvunj6hnlr" path="res://mastermind/row.tscn" id="2_fqcd7"]
+
+[node name="Mastermind" type="Node2D"]
+script = ExtResource("1_1mk4e")
+
+[node name="Row" parent="." instance=ExtResource("2_fqcd7")]
+
+[node name="InputColors" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+offset_top = 58.0
+offset_right = 40.0
+offset_bottom = 98.0
+
+[node name="Turquoise" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.2509804, 0.8784314, 0.8156863, 1)
+
+[node name="Cyan" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0, 1, 1, 1)
+
+[node name="Red" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 0, 0, 1)
+
+[node name="Yellow" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 1, 0, 1)
+
+[node name="Purple" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.4, 0.2, 0.6, 1)
+
+[node name="Orange" type="ColorRect" parent="InputColors"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 0.64705884, 0, 1)
+
+[node name="InputButtons" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+offset_top = 58.0
+offset_right = 40.0
+offset_bottom = 98.0
+
+[node name="Turquoise" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Cyan" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Red" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Yellow" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Purple" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Orange" type="Button" parent="InputButtons"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
