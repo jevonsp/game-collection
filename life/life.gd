@@ -1,7 +1,7 @@
 extends Node2D
 
 const grid_color = Color.DARK_GRAY
-const EXTENSION_FACTOR = 4
+const EXTENSION_FACTOR = 100
 const NEIGHBOR_OFFSETS := [
 	Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
 	Vector2(-1,  0),                 Vector2(1,  0),

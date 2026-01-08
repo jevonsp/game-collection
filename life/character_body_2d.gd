@@ -24,6 +24,8 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			if camera_2d.zoom + Vector2(.1, .1) >= Vector2(2.0, 2.0):
+				return
 			camera_2d.zoom += Vector2(.1, .1)
 			camera_updated.emit()
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
