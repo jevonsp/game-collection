@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk78yfg7dfw45"]
+
+[ext_resource type="Script" uid="uid://bjv2smyccweqk" path="res://life/life.gd" id="1_e55er"]
+
+[node name="Life" type="Node2D"]
+script = ExtResource("1_e55er")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
