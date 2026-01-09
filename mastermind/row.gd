@@ -9,7 +9,10 @@ var guesses:Array[ColorRect] = []
 @onready var results_1: ColorRect = $Results/ColorRect1
 @onready var results_2: ColorRect = $Results/ColorRect2
 @onready var results_3: ColorRect = $Results/ColorRect3
+var results:Array[ColorRect] = []
 
 func _ready() -> void:
 	for rect in [guesses_0, guesses_1, guesses_2, guesses_3]:
 		guesses.append(rect)
+	for rect in [results_0, results_1, results_2, results_3]:
+		results.append(rect)

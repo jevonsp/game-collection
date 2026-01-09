@@ -68,13 +68,56 @@ func _on_accept_pressed() -> void:
 		print("i=%s, choice=%s" % [i, choices[index]])
 	for rect in row.guesses:
 		rect.color = Color.WHITE
-	evaluate_guess(selected_choice_sequence)
+	var guess = evaluate_guess(selected_choice_sequence)
+	var results = calculate_results(guess)
+	display_results(results, row)
 	_on_clear_pressed()
 	
-func evaluate_guess(sequence) -> void:
-	for i in range(sequence.size()):
-		var guess_choice = sequence[i]
-		var cpu_choice = cpu_color_sequence[i]
-		print("Position %s: guess %s, cpu %s" % [i, guess_choice, cpu_choice])
-		print("  Correct color anywhere: %s" % [guess_choice in cpu_color_sequence])
-		print("  Correct color and position: %s" % [guess_choice == cpu_choice])
+func evaluate_guess(sequence) -> Array[int]:
+	var correct_position := 0
+	var correct_color := 0
+	
+	var guess_counts = {}
+	var cpu_counts = {}
+	
+	for i in range(4):
+		if sequence[i] == cpu_color_sequence[i]:
+			correct_position += 1
+		else:
+			if sequence[i] in guess_counts:
+				guess_counts[sequence[i]] += 1
+			else:
+				guess_counts[sequence[i]] = 1
+			
+			if cpu_color_sequence[i] in cpu_counts:
+				cpu_counts[cpu_color_sequence[i]] += 1
+			else:
+				cpu_counts[cpu_color_sequence[i]] = 1
+				
+	for color in guess_counts:
+		if color in cpu_counts:
+			correct_color += min(guess_counts[color], cpu_counts[color])
+			
+	print("Red Pegs: %s" % [correct_position])
+	print("White Pegs: %s" % [correct_color])
+	return [correct_position, correct_color]
+	
+func calculate_results(guess:Array[int]) -> Dictionary:
+	var results = {}
+	results["red"] = guess[0]
+	results["white"] = guess[1]
+	results["none"] = 4 - (guess[0] + guess[1])
+	print(results)
+	return results
+
+func display_results(results:Dictionary, row_param:HBoxContainer) -> void:
+	for r:ColorRect in row_param.results:
+		if results["red"] > 0:
+			r.color = Color.RED
+			results["red"] -= 1
+		elif results["white"] > 0:
+			r.color = Color.WHITE
+			results["white"] -= 1
+		elif results["none"] > 0:
+			r.color = Color.TRANSPARENT
+			results["none"] -= 1
