@@ -1,6 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://q1wvunj6hnlr"]
+[gd_scene load_steps=4 format=3 uid="uid://q1wvunj6hnlr"]
 
 [ext_resource type="Script" uid="uid://brcselvuqx0id" path="res://mastermind/row.gd" id="1_w626c"]
+
+[sub_resource type="Shader" id="Shader_w626c"]
+code = "// circular_clip.shader
+shader_type canvas_item;
+
+uniform float radius = 0.3;
+
+void fragment() {
+	// Simple circular mask
+	float dist = distance(UV, vec2(0.5));
+	if (dist > radius) {
+		discard;
+	}
+	// Keep the ColorRect's assigned color
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q5okf"]
+shader = SubResource("Shader_w626c")
+shader_parameter/radius = 0.45
 
 [node name="Row" type="HBoxContainer"]
 offset_right = 40.0
@@ -13,18 +32,22 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="ColorRect0" type="ColorRect" parent="Guesses"]
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ColorRect1" type="ColorRect" parent="Guesses"]
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ColorRect2" type="ColorRect" parent="Guesses"]
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ColorRect3" type="ColorRect" parent="Guesses"]
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -33,21 +56,28 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="ColorRect0" type="ColorRect" parent="Results"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 0)
 
 [node name="ColorRect1" type="ColorRect" parent="Results"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 0)
 
 [node name="ColorRect2" type="ColorRect" parent="Results"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 0)
 
 [node name="ColorRect3" type="ColorRect" parent="Results"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_q5okf")
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(1, 1, 1, 0)

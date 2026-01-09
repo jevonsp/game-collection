@@ -1,14 +1,36 @@
-[gd_scene load_steps=3 format=3 uid="uid://naq3h64sx7wv"]
+[gd_scene load_steps=6 format=3 uid="uid://naq3h64sx7wv"]
 
 [ext_resource type="Script" uid="uid://bopvs4kl7pfnr" path="res://mastermind/mastermind.gd" id="1_1mk4e"]
 [ext_resource type="PackedScene" uid="uid://q1wvunj6hnlr" path="res://mastermind/row.tscn" id="2_fqcd7"]
+[ext_resource type="Shader" uid="uid://b3hso3ir3to20" path="res://mastermind/circle_clip.gdshader" id="3_fqcd7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bjq28"]
+shader = ExtResource("3_fqcd7")
+shader_parameter/radius = 0.45
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u1e0g"]
+shader = ExtResource("3_fqcd7")
+shader_parameter/radius = 0.45
 
 [node name="Mastermind" type="Node2D"]
 script = ExtResource("1_1mk4e")
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
 [node name="Rows" type="VBoxContainer" parent="."]
-offset_left = 414.0
-offset_right = 834.0
+offset_left = 484.0
+offset_right = 904.0
 offset_bottom = 644.0
 
 [node name="Row11" parent="Rows" instance=ExtResource("2_fqcd7")]
@@ -73,47 +95,53 @@ alignment = 1
 
 [node name="InputColors" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
-offset_left = 91.0
-offset_top = 437.0
-offset_right = 391.0
-offset_bottom = 477.0
+offset_left = 179.0
+offset_top = 276.0
+offset_right = 479.0
+offset_bottom = 316.0
 
 [node name="Turquoise" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.2509804, 0.8784314, 0.8156863, 1)
 
 [node name="Cyan" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0, 1, 1, 1)
 
 [node name="Red" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 0, 0, 1)
 
 [node name="Yellow" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 0, 1)
 
 [node name="Purple" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.4, 0.2, 0.6, 1)
 
 [node name="Orange" type="ColorRect" parent="InputColors"]
+material = SubResource("ShaderMaterial_bjq28")
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 0.64705884, 0, 1)
 
 [node name="ColorInputButtons" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
-offset_left = 91.0
-offset_top = 437.0
-offset_right = 391.0
-offset_bottom = 477.0
+offset_left = 179.0
+offset_top = 276.0
+offset_right = 479.0
+offset_bottom = 316.0
 
 [node name="Turquoise" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
@@ -146,10 +174,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="InputButtons" type="HBoxContainer" parent="."]
-offset_left = 194.0
-offset_top = 495.0
-offset_right = 307.0
-offset_bottom = 535.0
+offset_left = 282.0
+offset_top = 334.0
+offset_right = 395.0
+offset_bottom = 374.0
 
 [node name="Clear" type="Button" parent="InputButtons"]
 layout_mode = 2
@@ -163,35 +191,37 @@ text = "Accept
 "
 
 [node name="Cpu Guess" type="HBoxContainer" parent="."]
-visible = false
-offset_left = 145.0
-offset_top = 58.0
-offset_right = 357.0
-offset_bottom = 98.0
+offset_left = 694.0
+offset_top = 429.0
+offset_right = 906.0
+offset_bottom = 469.0
 
 [node name="ColorRect0" type="ColorRect" parent="Cpu Guess"]
+material = SubResource("ShaderMaterial_u1e0g")
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="ColorRect1" type="ColorRect" parent="Cpu Guess"]
+material = SubResource("ShaderMaterial_u1e0g")
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="ColorRect2" type="ColorRect" parent="Cpu Guess"]
+material = SubResource("ShaderMaterial_u1e0g")
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="ColorRect3" type="ColorRect" parent="Cpu Guess"]
+material = SubResource("ShaderMaterial_u1e0g")
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="PlayAgain" type="Button" parent="."]
-visible = false
 custom_minimum_size = Vector2(200, 100)
-offset_left = 685.0
-offset_top = 434.0
-offset_right = 885.0
-offset_bottom = 534.0
+offset_left = 700.0
+offset_top = 478.0
+offset_right = 900.0
+offset_bottom = 578.0
 text = "Play Again?"
 
 [connection signal="pressed" from="InputButtons/Clear" to="." method="_on_clear_pressed"]

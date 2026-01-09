@@ -6,7 +6,7 @@ var colors:Array[Color] = [
 	Color.CYAN, 
 	Color.RED, 
 	Color.YELLOW, 
-	Color.PURPLE, 
+	Color.REBECCA_PURPLE, 
 	Color.ORANGE
 	]
 var choice_index:int = 0
@@ -14,6 +14,7 @@ var selected_choice_sequence:Array = []
 var cpu_color_sequence:Array[Choice] = []
 var rows:Array[HBoxContainer] = []
 var guess_index: int = 0
+var wins_in_row: int = 0
 #region Rows
 @onready var row_0: HBoxContainer = $Rows/Row0
 @onready var row_1: HBoxContainer = $Rows/Row1
@@ -138,29 +139,32 @@ func calculate_results(guess:Array[int]) -> Dictionary:
 func display_results(results:Dictionary, row:HBoxContainer) -> void:
 	for r:ColorRect in row.results:
 		if results["red"] > 0:
+			r.modulate = Color.WHITE
 			r.color = Color.RED
 			results["red"] -= 1
 		elif results["white"] > 0:
+			r.modulate = Color.WHITE
 			r.color = Color.WHITE
 			results["white"] -= 1
 		elif results["none"] > 0:
-			r.color = Color.TRANSPARENT
+			r.modulate = Color.TRANSPARENT
 			results["none"] -= 1
 
 func win():
-	clean_up()
 	print("winner!")
+	clean_up()
+	wins_in_row += 1
 
 func lose():
-	clean_up()
 	print("loser!")
+	clean_up()
+	wins_in_row = 0
 	
 func clean_up():
 	cpu_guess.visible = true
 	play_again.visible = true
 	guess_index = 0
 	choice_index = 0
-	clear_rows()
 
 func clear_rows() -> void:
 	for row in rows:
@@ -170,9 +174,11 @@ func clear_rows() -> void:
 			g.color = Color.WHITE
 		for r:ColorRect in row.results:
 			print("r=%s" % [r])
-			r.color = Color.TRANSPARENT
+			r.modulate = Color.TRANSPARENT
 
 func _on_play_again_pressed() -> void:
+	clear_rows()
+	clean_up()
 	cpu_guess.visible = false
 	play_again.visible = false
 	cpu_color_sequence = pick_color_sequence()
