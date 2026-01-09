@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpkd8twsxvght"]
+[gd_scene load_steps=6 format=3 uid="uid://dpkd8twsxvght"]
 
 [ext_resource type="Script" uid="uid://bgl062qvnfxy5" path="res://front_end.gd" id="1_kmk83"]
 [ext_resource type="PackedScene" uid="uid://cq3u0pa3qj6nb" path="res://snake/snake.tscn" id="2_fgqus"]
 [ext_resource type="PackedScene" uid="uid://rjlkfn2v4bpm" path="res://simon/simon.tscn" id="3_s2bpr"]
 [ext_resource type="PackedScene" uid="uid://dk78yfg7dfw45" path="res://life/conway's_game_of_life.tscn" id="4_no7jo"]
+[ext_resource type="PackedScene" uid="uid://naq3h64sx7wv" path="res://mastermind/mastermind.tscn" id="5_esbey"]
 
 [node name="FrontEnd" type="Control"]
 custom_minimum_size = Vector2(200, 0)
@@ -17,6 +18,7 @@ size_flags_horizontal = 4
 script = ExtResource("1_kmk83")
 games = Dictionary[String, PackedScene]({
 "life": ExtResource("4_no7jo"),
+"mastermind": ExtResource("5_esbey"),
 "simon": ExtResource("3_s2bpr"),
 "snake": ExtResource("2_fgqus")
 })
@@ -51,3 +53,7 @@ text = "Simon"
 [node name="life" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
 layout_mode = 2
 text = "Conway's Game of LIfe"
+
+[node name="mastermind" type="Button" parent="ScrollContainer/VBoxContainer" groups=["buttons"]]
+layout_mode = 2
+text = "Mastermind"

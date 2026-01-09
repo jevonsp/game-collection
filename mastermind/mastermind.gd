@@ -28,17 +28,22 @@ var guess_index: int = 0
 @onready var row_10: HBoxContainer = $Rows/Row10
 @onready var row_11: HBoxContainer = $Rows/Row11
 #endregion
+@onready var cpu_guess: HBoxContainer = $"Cpu Guess"
+@onready var play_again: Button = $PlayAgain
 
 func _ready() -> void:
 	bind_buttons()
-	#cpu_color_sequence = pick_color_sequence()
-	cpu_color_sequence = [Choice.TURQUOISE, Choice.TURQUOISE, Choice.RED, Choice.RED]
+	cpu_color_sequence = pick_color_sequence()
+	display_cpu_sequence()
 	for row in [row_0, row_1, row_2, row_3, row_4, row_5, row_6, row_7,row_8, row_9, row_10, row_11]:
 		rows.append(row)
-	print(cpu_color_sequence)
 	for i in range(4):
 		selected_choice_sequence.append(null)
-	print(selected_choice_sequence)
+
+func display_cpu_sequence():
+	var color_rects = cpu_guess.get_children()
+	for i in range(4):
+		color_rects[i].color = colors[cpu_color_sequence[i]]
 
 func bind_buttons() -> void:
 	var buttons := get_tree().get_nodes_in_group("buttons")
@@ -54,7 +59,6 @@ func bind_buttons() -> void:
 		b.pressed.connect(pressed)
 		
 func _on_pressed(which: Button) -> void:
-	print("choice index: %s" % [choice_index])
 	var selected = which.get_meta("choice")
 	var slot = choice_index % 4
 	
@@ -75,28 +79,23 @@ func pick_color_sequence() -> Array[Choice]:
 	return res
 
 func _on_clear_pressed() -> void:
-	print("clear called")
 	for rect in rows[guess_index].guesses:
 		rect.color = Color.WHITE
-	selected_choice_sequence.clear()
+	selected_choice_sequence = [null, null, null, null]
 	choice_index = 0
 
 func _on_accept_pressed() -> void:
-	if len(selected_choice_sequence) < 4:
-		return
-	var choices:Array = [
-		"TURQUOISE", "CYAN", "RED", "YELLOW", "PURPLE", "ORANGE"
-	]
-	for i in range(selected_choice_sequence.size()):
-		var index = selected_choice_sequence[i]
-		print("i=%s, choice=%s" % [i, choices[index]])
+	for choice in selected_choice_sequence:
+		if choice == null:
+			print("enter at least 4 numbers")
+			return
 	var guess = evaluate_guess(selected_choice_sequence)
 	var results = calculate_results(guess)
 	if results.has("red"):
 		if results["red"] == 4:
 			win()
 	display_results(results, rows[guess_index])
-	selected_choice_sequence.clear()
+	selected_choice_sequence  = [null, null, null, null]
 	guess_index += 1
 	if guess_index > 11:
 		lose()
@@ -127,8 +126,6 @@ func evaluate_guess(sequence) -> Array[int]:
 		if color in cpu_counts:
 			correct_color += min(guess_counts[color], cpu_counts[color])
 			
-	print("Red Pegs: %s" % [correct_position])
-	print("White Pegs: %s" % [correct_color])
 	return [correct_position, correct_color]
 	
 func calculate_results(guess:Array[int]) -> Dictionary:
@@ -136,11 +133,10 @@ func calculate_results(guess:Array[int]) -> Dictionary:
 	results["red"] = guess[0]
 	results["white"] = guess[1]
 	results["none"] = 4 - (guess[0] + guess[1])
-	print(results)
 	return results
 
-func display_results(results:Dictionary, row_param:HBoxContainer) -> void:
-	for r:ColorRect in row_param.results:
+func display_results(results:Dictionary, row:HBoxContainer) -> void:
+	for r:ColorRect in row.results:
 		if results["red"] > 0:
 			r.color = Color.RED
 			results["red"] -= 1
@@ -152,7 +148,32 @@ func display_results(results:Dictionary, row_param:HBoxContainer) -> void:
 			results["none"] -= 1
 
 func win():
+	clean_up()
 	print("winner!")
 
 func lose():
+	clean_up()
 	print("loser!")
+	
+func clean_up():
+	cpu_guess.visible = true
+	play_again.visible = true
+	guess_index = 0
+	choice_index = 0
+	clear_rows()
+
+func clear_rows() -> void:
+	for row in rows:
+		print("row=%s" % [row])
+		for g:ColorRect in row.guesses:
+			print("g=%s" % [g])
+			g.color = Color.WHITE
+		for r:ColorRect in row.results:
+			print("r=%s" % [r])
+			r.color = Color.TRANSPARENT
+
+func _on_play_again_pressed() -> void:
+	cpu_guess.visible = false
+	play_again.visible = false
+	cpu_color_sequence = pick_color_sequence()
+	display_cpu_sequence()
