@@ -11,52 +11,7 @@ offset_left = 414.0
 offset_right = 834.0
 offset_bottom = 644.0
 
-[node name="Row0" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row1" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row2" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row3" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row4" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row5" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row6" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row7" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row8" parent="Rows" instance=ExtResource("2_fqcd7")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="Row9" parent="Rows" instance=ExtResource("2_fqcd7")]
+[node name="Row11" parent="Rows" instance=ExtResource("2_fqcd7")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 alignment = 1
@@ -66,7 +21,52 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 alignment = 1
 
-[node name="Row11" parent="Rows" instance=ExtResource("2_fqcd7")]
+[node name="Row9" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row8" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row7" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row6" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row5" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row4" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row3" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row2" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row1" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row0" parent="Rows" instance=ExtResource("2_fqcd7")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 alignment = 1

@@ -10,7 +10,7 @@ var colors:Array[Color] = [
 	Color.ORANGE
 	]
 var choice_index:int = 0
-var selected_choice_sequence:Array[Choice] = []
+var selected_choice_sequence:Array = []
 var cpu_color_sequence:Array[Choice] = []
 var rows:Array[HBoxContainer] = []
 var guess_index: int = 0
@@ -36,6 +36,9 @@ func _ready() -> void:
 	for row in [row_0, row_1, row_2, row_3, row_4, row_5, row_6, row_7,row_8, row_9, row_10, row_11]:
 		rows.append(row)
 	print(cpu_color_sequence)
+	for i in range(4):
+		selected_choice_sequence.append(null)
+	print(selected_choice_sequence)
 
 func bind_buttons() -> void:
 	var buttons := get_tree().get_nodes_in_group("buttons")
@@ -51,14 +54,16 @@ func bind_buttons() -> void:
 		b.pressed.connect(pressed)
 		
 func _on_pressed(which: Button) -> void:
-	if choice_index >= 4:
-		print("Row is full! Press Accept to submit or Clear to reset")
-		return
+	print("choice index: %s" % [choice_index])
 	var selected = which.get_meta("choice")
-	var next_rect = rows[guess_index].guesses[choice_index]
+	var slot = choice_index % 4
+	
+	var next_rect = rows[guess_index].guesses[slot]
 	next_rect.color = colors[selected]
-	selected_choice_sequence.append(selected)
-	choice_index += 1
+	
+	selected_choice_sequence[slot] = selected
+	
+	choice_index = (choice_index + 1) % 4
 	
 func pick_color_sequence() -> Array[Choice]:
 	var res:Array[Choice] = []
@@ -83,7 +88,7 @@ func _on_accept_pressed() -> void:
 		"TURQUOISE", "CYAN", "RED", "YELLOW", "PURPLE", "ORANGE"
 	]
 	for i in range(selected_choice_sequence.size()):
-		var index := selected_choice_sequence[i]
+		var index = selected_choice_sequence[i]
 		print("i=%s, choice=%s" % [i, choices[index]])
 	var guess = evaluate_guess(selected_choice_sequence)
 	var results = calculate_results(guess)
