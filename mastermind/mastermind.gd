@@ -12,12 +12,30 @@ var colors:Array[Color] = [
 var choice_index:int = 0
 var selected_choice_sequence:Array[Choice] = []
 var cpu_color_sequence:Array[Choice] = []
-@onready var row: HBoxContainer = $Row
+var rows:Array[HBoxContainer] = []
+var guess_index: int = 0
+#region Rows
+@onready var row_0: HBoxContainer = $Rows/Row0
+@onready var row_1: HBoxContainer = $Rows/Row1
+@onready var row_2: HBoxContainer = $Rows/Row2
+@onready var row_3: HBoxContainer = $Rows/Row3
+@onready var row_4: HBoxContainer = $Rows/Row4
+@onready var row_5: HBoxContainer = $Rows/Row5
+@onready var row_6: HBoxContainer = $Rows/Row6
+@onready var row_7: HBoxContainer = $Rows/Row7
+@onready var row_8: HBoxContainer = $Rows/Row8
+@onready var row_9: HBoxContainer = $Rows/Row9
+@onready var row_10: HBoxContainer = $Rows/Row10
+@onready var row_11: HBoxContainer = $Rows/Row11
+#endregion
 
 func _ready() -> void:
 	bind_buttons()
 	#cpu_color_sequence = pick_color_sequence()
 	cpu_color_sequence = [Choice.TURQUOISE, Choice.TURQUOISE, Choice.RED, Choice.RED]
+	for row in [row_0, row_1, row_2, row_3, row_4, row_5, row_6, row_7,row_8, row_9, row_10, row_11]:
+		rows.append(row)
+	print(cpu_color_sequence)
 
 func bind_buttons() -> void:
 	var buttons := get_tree().get_nodes_in_group("buttons")
@@ -37,7 +55,7 @@ func _on_pressed(which: Button) -> void:
 		print("Row is full! Press Accept to submit or Clear to reset")
 		return
 	var selected = which.get_meta("choice")
-	var next_rect = row.guesses[choice_index]
+	var next_rect = rows[guess_index].guesses[choice_index]
 	next_rect.color = colors[selected]
 	selected_choice_sequence.append(selected)
 	choice_index += 1
@@ -52,7 +70,8 @@ func pick_color_sequence() -> Array[Choice]:
 	return res
 
 func _on_clear_pressed() -> void:
-	for rect in row.guesses:
+	print("clear called")
+	for rect in rows[guess_index].guesses:
 		rect.color = Color.WHITE
 	selected_choice_sequence.clear()
 	choice_index = 0
@@ -66,12 +85,17 @@ func _on_accept_pressed() -> void:
 	for i in range(selected_choice_sequence.size()):
 		var index := selected_choice_sequence[i]
 		print("i=%s, choice=%s" % [i, choices[index]])
-	for rect in row.guesses:
-		rect.color = Color.WHITE
 	var guess = evaluate_guess(selected_choice_sequence)
 	var results = calculate_results(guess)
-	display_results(results, row)
-	_on_clear_pressed()
+	if results.has("red"):
+		if results["red"] == 4:
+			win()
+	display_results(results, rows[guess_index])
+	selected_choice_sequence.clear()
+	guess_index += 1
+	if guess_index > 11:
+		lose()
+	choice_index = 0
 	
 func evaluate_guess(sequence) -> Array[int]:
 	var correct_position := 0
@@ -121,3 +145,9 @@ func display_results(results:Dictionary, row_param:HBoxContainer) -> void:
 		elif results["none"] > 0:
 			r.color = Color.TRANSPARENT
 			results["none"] -= 1
+
+func win():
+	print("winner!")
+
+func lose():
+	print("loser!")

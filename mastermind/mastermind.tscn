@@ -6,13 +6,77 @@
 [node name="Mastermind" type="Node2D"]
 script = ExtResource("1_1mk4e")
 
-[node name="Row" parent="." instance=ExtResource("2_fqcd7")]
+[node name="Rows" type="VBoxContainer" parent="."]
+offset_left = 414.0
+offset_right = 834.0
+offset_bottom = 644.0
+
+[node name="Row0" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row1" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row2" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row3" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row4" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row5" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row6" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row7" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row8" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row9" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row10" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Row11" parent="Rows" instance=ExtResource("2_fqcd7")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
 
 [node name="InputColors" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
-offset_top = 58.0
-offset_right = 40.0
-offset_bottom = 98.0
+offset_left = 91.0
+offset_top = 437.0
+offset_right = 391.0
+offset_bottom = 477.0
 
 [node name="Turquoise" type="ColorRect" parent="InputColors"]
 layout_mode = 2
@@ -44,57 +108,59 @@ layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 0.64705884, 0, 1)
 
-[node name="InputButtons" type="HBoxContainer" parent="."]
+[node name="ColorInputButtons" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
-offset_top = 58.0
-offset_right = 40.0
-offset_bottom = 98.0
+offset_left = 91.0
+offset_top = 437.0
+offset_right = 391.0
+offset_bottom = 477.0
 
-[node name="Turquoise" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Turquoise" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Cyan" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Cyan" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Red" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Red" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Yellow" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Yellow" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Purple" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Purple" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Orange" type="Button" parent="InputButtons" groups=["buttons"]]
+[node name="Orange" type="Button" parent="ColorInputButtons" groups=["buttons"]]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-offset_top = 116.0
-offset_right = 84.0
-offset_bottom = 156.0
+[node name="InputButtons" type="HBoxContainer" parent="."]
+offset_left = 194.0
+offset_top = 495.0
+offset_right = 307.0
+offset_bottom = 535.0
 
-[node name="Clear" type="Button" parent="HBoxContainer"]
+[node name="Clear" type="Button" parent="InputButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear"
 
-[node name="Accept" type="Button" parent="HBoxContainer"]
+[node name="Accept" type="Button" parent="InputButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Accept
 "
 
-[connection signal="pressed" from="HBoxContainer/Clear" to="." method="_on_clear_pressed"]
-[connection signal="pressed" from="HBoxContainer/Accept" to="." method="_on_accept_pressed"]
+[connection signal="pressed" from="InputButtons/Clear" to="." method="_on_clear_pressed"]
+[connection signal="pressed" from="InputButtons/Accept" to="." method="_on_accept_pressed"]
